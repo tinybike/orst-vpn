@@ -1,0 +1,25 @@
+{
+    "vpn": {
+        "IPSec_ID": "ORST_VPN3K",
+        "IPSec_gateway": "sds.oregonstate.edu",
+        "IPSec_secret": "GROUP_SECRET_HERE",
+        "Xauth_username": "YOUR_USERNAME",
+        "Xauth_password": "YOUR_PASSWORD",
+        "IKE_Authmode": "psk",
+        "IKE_DH_Group": "dh2",
+        "DNSUpdate": "no",
+        "NAT_Traversal_Mode": "force-natt",
+        "Local_Port": 0,
+        "Cisco_UDP_Encapsulation_Port": 0
+    },
+    "db": {
+        "user": "YOUR_DB_USERNAME",
+        "password": "YOUR_DB_PASSWORD",
+        "server": "stewartia.forestry.oregonstate.edu",
+        "database": "FSDBDATA",
+        "port": "1433",
+        "options": {
+            "encrypt": false
+        }
+    }
+}

@@ -5,14 +5,32 @@
 var cp = require("child_process");
 var vpnc = require("vpnc");
 var chalk = require("chalk");
+var db = require("mssql");
 var config = require("./config");
 var log = console.log;
+
+/* uncomment the next line to use sheldon.forestry.oregonstate.edu */
+// config.db.server = "sheldon.forestry.oregonstate.edu";
 
 function doStuff() {
 
     /* insert commands you want to carry out while connected to the vpn here */
 
-    disconnect();
+    var conn = new db.Connection(config.db, function (err) {
+        if (err) throw err;
+
+        var query = "SELECT TOP 1 * FROM metdat.dbo.phrsc_table2 ORDER BY tmstamp ASC";
+        var request = conn.request();
+        request.query(query, function (err, recordset) {
+            if (err) throw err;
+            console.dir(recordset);
+            disconnect();
+        });    
+    });
+
+    conn.on("error", function (err) {
+        if (err) log("Database error:", err);
+    });
 }
 
 function disconnect() {
@@ -21,12 +39,13 @@ function disconnect() {
             log("Error disconnecting VPN:", err);
         } else {
             log("VPN", chalk.yellow("disconnected [" + code + "]"));
+            process.exit(0);
         }
     });
 }
 
 function connect() {
-    vpnc.connect(config, function (err, code) {
+    vpnc.connect(config.vpn, function (err, code) {
         if (err) {
             log("Error connecting VPN:", err);
         } else {
@@ -55,4 +74,4 @@ vpnc.available(function (err, version) {
     }
 });
 
-process.on("exit", function () { disconnect(); });
+process.on("exit", function (code) { if (code) disconnect(); });
