@@ -1,0 +1,20 @@
+{
+  "name": "vpnc-orst-vpn3k",
+  "version": "0.0.1",
+  "description": "Connect to ORST_VPN3K using vpnc",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tinybike/vpnc-orst-vpn3k.git"
+  },
+  "author": "Jack Peterson <jack@tinybike.net>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tinybike/vpnc-orst-vpn3k/issues"
+  },
+  "homepage": "https://github.com/tinybike/vpnc-orst-vpn3k#readme",
+  "dependencies": {
+    "chalk": "^1.1.1",
+    "vpnc": "^1.4.10"
+  }
+}
