@@ -2,7 +2,7 @@
   "name": "vpnc-orst-vpn3k",
   "version": "0.0.1",
   "description": "Connect to ORST_VPN3K using vpnc",
-  "main": "index.js",
+  "main": "vpn.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tinybike/vpnc-orst-vpn3k.git"

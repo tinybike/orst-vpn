@@ -5,10 +5,15 @@
 var cp = require("child_process");
 var vpnc = require("vpnc");
 var chalk = require("chalk");
-var config = require("./vpn.json");
+var config = require("./config");
 var log = console.log;
 
-var sql = "select top 1 * from metdat.dbo.phrsc_table2 order by tmstamp asc";
+function doStuff() {
+
+    /* insert commands you want to carry out while connected to the vpn here */
+
+    disconnect();
+}
 
 function disconnect() {
     vpnc.disconnect(function (err, code) {
@@ -35,7 +40,7 @@ function connect() {
                 }
                 log("VPN", chalk.cyan("connected [" + code + "]"));
                 log(chalk.green(stdout));
-                disconnect();
+                doStuff();
             });
         }
     });
