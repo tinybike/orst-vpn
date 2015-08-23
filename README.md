@@ -10,7 +10,7 @@ First install `vpnc`:
 
     $ apt-get install vpnc
 
-On OSX use `brew install vpnc' instead.  Then clone this repository and navigate to the new directory and do:
+On OSX use `brew install vpnc` instead.  Then clone this repository and navigate to the new directory and do:
 
     $ npm install
 
