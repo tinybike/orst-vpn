@@ -19,7 +19,9 @@
         "database": "FSDBDATA",
         "port": "1433",
         "options": {
-            "encrypt": false
+            "encrypt": false,
+            "connectTimeout": 60000,
+            "requestTimeout": 60000
         }
     }
 }

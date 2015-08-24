@@ -2,7 +2,6 @@
 
 "use strict";
 
-var cp = require("child_process");
 var vpnc = require("vpnc");
 var chalk = require("chalk");
 var db = require("mssql");
@@ -11,6 +10,14 @@ var log = console.log;
 
 /* uncomment the next line to use sheldon.forestry.oregonstate.edu */
 // config.db.server = "sheldon.forestry.oregonstate.edu";
+
+function stringify(o) {
+    if (o && (o.constructor === Object || o.constructor === Array)) {
+        return JSON.stringify(o, null, 2);
+    } else {
+        return o.toString();
+    }
+}
 
 var vpn = {
 
@@ -22,11 +29,13 @@ var vpn = {
         var conn = new db.Connection(config.db, function (err) {
             if (err) throw err;
 
+            /* insert sql queries here! */
+
             var query = "SELECT TOP 1 * FROM metdat.dbo.phrsc_table2 ORDER BY tmstamp ASC";
             var request = conn.request();
             request.query(query, function (err, recordset) {
                 if (err) throw err;
-                console.dir(recordset);
+                log(chalk.cyan(stringify(recordset)));
                 self.disconnect();
             });
         });
@@ -54,18 +63,12 @@ var vpn = {
             if (err) {
                 log("Error connecting VPN:", err);
             } else {
-
-                // did we connect to the VPN successfully?
-                // (check for tun0, tun1, etc. using ifconfig)
-                cp.exec("ifconfig tun", function (err, stdout) {
-                    if (err) {
-                        log(chalk.red.bold("Unable to connect to VPN"));
-                        self.disconnect();
-                    }
-                    log("VPN", chalk.cyan("connected [" + code + "]"));
-                    log(chalk.green(stdout));
+                try {
                     self.doStuff();
-                });
+                } catch (ex) {
+                    log("Couldn't do stuff. Are you connected to the VPN?");
+                    self.disconnect();
+                }
             }
         });
     }
@@ -75,7 +78,7 @@ vpnc.available(function (err, version) {
     if (err) {
         log("vpnc unavailable:", err);
     } else {
-        log("Found vpnc:", chalk.gray(JSON.stringify(version, null, 2)));
+        log("Found vpnc:", chalk.gray(stringify(version)));
         vpn.connect();
     }
 });
