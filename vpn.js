@@ -12,10 +12,12 @@ var log = console.log;
 // config.db.server = "sheldon.forestry.oregonstate.edu";
 
 function stringify(o) {
-    if (o && (o.constructor === Object || o.constructor === Array)) {
-        return JSON.stringify(o, null, 2);
-    } else {
-        return o.toString();
+    if (o !== undefined && o !== null) {
+        if (o.constructor === Object || o.constructor === Array) {
+            return JSON.stringify(o, null, 2);
+        } else {
+            return o.toString();
+        }
     }
 }
 
