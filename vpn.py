@@ -17,7 +17,7 @@ def do_stuff(cursor):
     query = "SELECT TOP 1 * FROM metdat.dbo.phrsc_table2 ORDER BY tmstamp ASC"
     cursor.execute(query)
     for row in cursor:
-        print row
+        print json.dumps(row, indent=2, sort_keys=True)
 
 def vpn_connect(config):
 
@@ -66,7 +66,7 @@ def main():
             "database": config["db"]["database"],
         }
         with pymssql.connect(**db_params) as conn:
-            with conn.cursor() as cursor:
+            with conn.cursor(as_dict=True) as cursor:
                 do_stuff(cursor)
 
 if __name__ == "__main__":
