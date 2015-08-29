@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """A post-interview present for Fox :)"""
+import sys
 import os
 import json
 import subprocess
@@ -22,7 +23,8 @@ def do_stuff(cursor):
 def vpn_connect(config):
 
     # create properly formatted vpnc config file
-    tempfile = os.path.join(HERE, "tempvpnc.conf")
+    configfile = "tempvpnc.conf"
+    tempfile = os.path.join(HERE, configfile)
     with open(tempfile, "w+") as f:
         print >> f, (
             "IPSec gateway %(IPSec_gateway)s\n"
@@ -33,27 +35,36 @@ def vpn_connect(config):
             "Xauth password %(Xauth_password)s"
         ) % config
 
-    # move config file to /etc/vpnc
-    subprocess.check_call(["sudo", "mv", tempfile, "/etc/vpnc/"])
-    subprocess.check_call(["sudo", "chown", "root:root", "/etc/vpnc/tempvpnc.conf"])
-    subprocess.check_call(["sudo", "chmod", "600", "/etc/vpnc/tempvpnc.conf"])
+    # move config file to /etc/vpnc (linux) or /usr/local/etc/vpnc/ (osx)
+    if sys.platform.startswith("linux"):
+        configdir = "/etc/vpnc"
+    elif sys.platform.startswith("darwin"):
+        configdir = "/usr/local/etc/vpnc"
+    else:
+        configdir = "/etc/vpnc"
+    configpath = os.path.join(configdir, configfile)
+    subprocess.check_call(["sudo", "mv", tempfile, configdir])
+    subprocess.check_call(["sudo", "chown", "root:root", configpath])
+    subprocess.check_call(["sudo", "chmod", "600", configpath])
 
     # connect to vpnc
-    subprocess.check_call(["sudo", "vpnc", "tempvpnc"], env=os.environ)    
+    subprocess.check_call(["sudo", "vpnc", "tempvpnc"], env=os.environ)
 
-def vpn_disconnect():
+    return configpath
+
+def vpn_disconnect(configpath):
 
     # disconnect from vpnc
-    subprocess.check_call(["sudo", "vpnc-disconnect"])
+    subprocess.call(["sudo", "vpnc-disconnect"])
 
     # remove the generated config file
-    subprocess.check_call(["sudo", "rm", "/etc/vpnc/tempvpnc.conf"])
+    subprocess.call(["sudo", "rm", configpath])
 
 @contextmanager
 def vpnc(config):
-    vpn_connect(config)
+    configpath = vpn_connect(config)
     yield
-    vpn_disconnect()
+    vpn_disconnect(configpath)
 
 def main():
     with open(os.path.join(HERE, "config.json")) as configfile:
