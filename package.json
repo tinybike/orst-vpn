@@ -1,21 +1,36 @@
 {
-  "name": "vpnc-orst-vpn3k",
-  "version": "0.0.1",
+  "name": "orst-vpn",
+  "version": "0.1.0",
   "description": "Connect to ORST_VPN3K using vpnc",
-  "main": "vpn.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/*.js",
+    "lint": "jshint index.js && jshint test/*.js"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tinybike/vpnc-orst-vpn3k.git"
+    "url": "git+https://github.com/tinybike/orst-vpn.git"
   },
   "author": "Jack Peterson <jack@tinybike.net>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tinybike/vpnc-orst-vpn3k/issues"
+    "url": "https://github.com/tinybike/orst-vpn/issues"
   },
-  "homepage": "https://github.com/tinybike/vpnc-orst-vpn3k#readme",
+  "homepage": "https://github.com/tinybike/orst-vpn#readme",
   "dependencies": {
-    "chalk": "^1.1.1",
     "mssql": "^2.2.0",
     "vpnc": "^1.4.10"
+  },
+  "devDependencies": {
+    "browserify": "^11.0.1",
+    "chai": "^3.2.0",
+    "gulp": "^3.9.0",
+    "jshint": "^2.8.0",
+    "mocha": "^2.3.0",
+    "uglify-js": "^2.4.24"
+  },
+  "directories": {
+    "dist": "dist",
+    "test": "test"
   }
 }
